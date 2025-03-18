@@ -1,17 +1,16 @@
 --------------------------
 
-## **📌 1. 技术栈选择**
+# 钓鱼web克隆 (web_fishing_go)
 
-- **GUI 框架**：`PyQt6` 或 `Tkinter`（推荐 PyQt6，界面更美观）
-- **HTTP 请求**：`requests` 或 `httpx`（支持异步请求）
-- **HTML 解析**：`BeautifulSoup4`（解析静态页面）
-- **动态渲染**（如果目标页面有 JavaScript 渲染）：`selenium` 或 `playwright`
-- **文件存储**：`os` + `shutil`
-- **进度条**：PyQt6 内置 `QProgressBar` 或 `tqdm`
+**一款web克隆网页生成，可用于网络安全web网页钓鱼测试**
 
 ------
 
-## **📌 2. 目录结构**
+#### 页面截图
+
+![1](image\1.png)
+
+## **📌 1. 目录结构**
 
 ```
 web_fishing_go/
@@ -27,206 +26,43 @@ web_fishing_go/
 
 ------
 
-## **📌 3. 功能模块**
+## **📌 2. 使用教程**
 
-### **(1) GUI 界面**
+## 方法一
 
-✅ **主要功能**：
+### **1、 直接下载打包的EXE**
 
-- 输入框（用户输入网址）
-- 按钮（执行克隆、取消任务）
-- 进度条（显示克隆进度）
-- 目录路径显示（默认存储到 `output/`）
+## 方法二
 
-✅ **实现方式**：
+1、安装依赖。
 
-- 使用 `PyQt6` 创建 UI 界面
-- `QLineEdit` 作为输入框
-- `QPushButton` 作为按钮
-- `QProgressBar` 作为进度条
-- `QLabel` 显示状态信息
-
-------
-
-### **(2) 网页下载**
-
-✅ **主要功能**：
-
-- 解析 HTML 文件
-- 下载 CSS、JS、图片等资源
-- 处理 `href` 和 `src` 绝对路径 -> 相对路径
-- 存储到本地文件夹
-
-✅ **实现方式**：
-
-- 使用 `requests.get(url)` 下载静态 HTML
-- `BeautifulSoup4` 解析 HTML 并提取资源链接
-- 使用 `os.makedirs()` 在 `output/` 目录中创建对应网页的目录
-- 使用 `shutil.copy()` 复制资源到本地
-- 如果需要 JS 渲染，使用 `playwright` 或 `selenium`
-
-------
-
-### **(3) 进度条**
-
-✅ **主要功能**：
-
-- 显示网页下载进度（HTML -> CSS -> JS -> 图片）
-- 支持多线程下载，防止 GUI 卡顿
-
-✅ **实现方式**：
-
-- `PyQt6.QProgressBar` 实现进度更新
-- 使用 `QThread` 进行异步下载，防止主线程卡死
-- `signal.emit()` 实时更新 UI
-
-------
-
-### **(4) 文件存储**
-
-✅ **主要功能**：
-
-- 在 `output/` 目录下创建以 URL 命名的文件夹
-- 将克隆的网页存储到该文件夹内
-- 支持手动选择存储位置（可选）
-
-✅ **实现方式**：
-
-- `os.makedirs()` 创建目录
-- `shutil.copyfile()` 复制下载的文件
-- `open(file, 'wb')` 存储 HTML 数据
-
-------
-
-## **📌 4. 具体实现步骤**
-
-### **(1) 安装必要的 Python 依赖**
+2、运行脚本。
 
 ```python
-pip install PyQt6 requests beautifulsoup4 selenium playwright tqdm
+pip install requirements.txt
+python main.py
 ```
 
-如果要使用 **Playwright** 进行 JS 渲染：
+## **📌 3. 工具实测**
 
-```python
-playwright install
-```
+### 1、克隆完毕
 
-------
+![2](F:\aihome\web_fishing_go\image\2.png)
 
-### **(2) 创建 GUI**
+### 2、使用apache或者nginx都可以，但是PHP需5.6，或更低版本
 
-使用 **PyQt6** 创建基本 UI 界面：
+![4](F:\aihome\web_fishing_go\image\4.png)
 
-```python
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPushButton, QProgressBar, QLabel
+### 3、可以看到当点击登录会抓取POST的内容。
 
-class WebCloneGUI(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.init_ui()
+### 4、并弹出错误，点击重试会跳转到克隆时自定义的网址。
 
-    def init_ui(self):
-        self.setWindowTitle("网页克隆工具")
-        self.setGeometry(100, 100, 400, 200)
+![7](F:\aihome\web_fishing_go\image\7.png)
 
-        layout = QVBoxLayout()
+### 5、可以看到成功生成txt，得到账号密码
 
-        self.url_input = QLineEdit(self)
-        self.url_input.setPlaceholderText("请输入网址")
-        layout.addWidget(self.url_input)
+![9](F:\aihome\web_fishing_go\image\9.png)
 
-        self.start_button = QPushButton("开始克隆", self)
-        self.start_button.clicked.connect(self.start_clone)
-        layout.addWidget(self.start_button)
+![10](F:\aihome\web_fishing_go\image\10.png)
 
-        self.progress = QProgressBar(self)
-        layout.addWidget(self.progress)
-
-        self.status_label = QLabel("状态：等待输入网址", self)
-        layout.addWidget(self.status_label)
-
-        self.setLayout(layout)
-
-    def start_clone(self):
-        url = self.url_input.text()
-        self.status_label.setText(f"正在克隆：{url}")
-        # 这里调用克隆函数
-```
-
-------
-
-### **(3) 网页下载逻辑**
-
-使用 `requests` 下载 HTML 和静态资源：
-
-```python
-import os
-import requests
-from bs4 import BeautifulSoup
-from urllib.parse import urljoin, urlparse
-
-def download_website(url, output_folder="output"):
-    parsed_url = urlparse(url)
-    site_name = parsed_url.netloc.replace(".", "_")
-    save_path = os.path.join(output_folder, site_name)
-
-    os.makedirs(save_path, exist_ok=True)
-
-    response = requests.get(url)
-    if response.status_code != 200:
-        print("无法访问网站")
-        return
-
-    soup = BeautifulSoup(response.text, "html.parser")
-
-    # 下载 HTML
-    with open(os.path.join(save_path, "index.html"), "w", encoding="utf-8") as f:
-        f.write(soup.prettify())
-
-    # 下载 CSS、JS 和图片
-    for tag in soup.find_all(["link", "script", "img"]):
-        src_attr = "href" if tag.name == "link" else "src"
-        if tag.has_attr(src_attr):
-            file_url = urljoin(url, tag[src_attr])
-            file_name = os.path.basename(file_url)
-            file_path = os.path.join(save_path, file_name)
-
-            try:
-                file_data = requests.get(file_url).content
-                with open(file_path, "wb") as f:
-                    f.write(file_data)
-                tag[src_attr] = file_name  # 修改 HTML 路径
-            except:
-                print(f"无法下载 {file_url}")
-
-    # 保存修改后的 HTML
-    with open(os.path.join(save_path, "index.html"), "w", encoding="utf-8") as f:
-        f.write(str(soup))
-```
-
-------
-
-### **(4) 绑定 GUI 逻辑**
-
-在 GUI 的 `start_clone()` 方法中调用 `download_website(url)`，并更新进度条。
-
-------
-
-## **📌 5. 未来扩展**
-
-- ✅ **支持 JavaScript 渲染页面**（使用 `playwright` 或 `selenium`）
-- ✅ **支持多线程加速下载**（`threading` 或 `asyncio`）
-- ✅ **支持代理和 User-Agent 伪装**
-- ✅ **支持增量更新和断点续传**
-- ✅ **支持 HTML 文件本地化（修改相对路径）**
-
-------
-
-### **📌 6. 总结**
-
-- **使用 PyQt6 构建 GUI**
-- **使用 requests/BeautifulSoup 下载 HTML 和资源**
-- **使用线程+进度条实现异步更新**
-- **存储到 `output/` 目录**
-- **未来可扩展 JS 渲染、代理等功能**
+## 本工具仅供学习和测试使用。使用本工具所产生的一切法律责任由使用者自行承担!
