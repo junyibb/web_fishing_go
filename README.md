@@ -4,6 +4,8 @@
 
 **一款web克隆网页生成，可用于网络安全web网页钓鱼测试**
 
+##### 已开源，期待各位二开加魔改。
+
 ------
 
 #### 页面截图
@@ -66,3 +68,5 @@ python main.py
 ![10](https://github.com/junyibb/web_fishing_go/blob/main/image/10.png?raw=true)
 
 ## 本工具仅供学习和测试使用。使用本工具所产生的一切法律责任由使用者自行承担!
+
+更多内容关注：毅心安全
