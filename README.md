@@ -8,7 +8,7 @@
 
 #### 页面截图
 
-![1](image\1.png)
+![1](https://github.com/junyibb/web_fishing_go/blob/main/image/1.png?raw=true)
 
 ## **📌 1. 目录结构**
 
@@ -47,22 +47,22 @@ python main.py
 
 ### 1、克隆完毕
 
-![2](F:\aihome\web_fishing_go\image\2.png)
+![2](https://github.com/junyibb/web_fishing_go/blob/main/image/2.png?raw=true)
 
 ### 2、使用apache或者nginx都可以，但是PHP需5.6，或更低版本
 
-![4](F:\aihome\web_fishing_go\image\4.png)
+![4](https://github.com/junyibb/web_fishing_go/blob/main/image/4.png?raw=true)
 
 ### 3、可以看到当点击登录会抓取POST的内容。
 
 ### 4、并弹出错误，点击重试会跳转到克隆时自定义的网址。
 
-![7](F:\aihome\web_fishing_go\image\7.png)
+![7](https://github.com/junyibb/web_fishing_go/blob/main/image/7.png?raw=true)
 
 ### 5、可以看到成功生成txt，得到账号密码
 
-![9](F:\aihome\web_fishing_go\image\9.png)
+![9](https://github.com/junyibb/web_fishing_go/blob/main/image/9.png?raw=true)
 
-![10](F:\aihome\web_fishing_go\image\10.png)
+![10](https://github.com/junyibb/web_fishing_go/blob/main/image/10.png?raw=true)
 
 ## 本工具仅供学习和测试使用。使用本工具所产生的一切法律责任由使用者自行承担!
